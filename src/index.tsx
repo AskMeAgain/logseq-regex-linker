@@ -1,6 +1,6 @@
 import "@logseq/libs";
-import { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
+import {App} from "~/app";
 
 const callback = async (mutationsList: MutationRecord[]): Promise<void> => {
   for (const m of mutationsList) {
@@ -17,51 +17,29 @@ const callback = async (mutationsList: MutationRecord[]): Promise<void> => {
       if (!currBlock) return;
 
       //Execute inline parsing
-      const newStr = currBlock.content.replace(
-        /LE-(.*)4/,
-        "[$1](http://$1.de)",
-      );
-      // const content = await parse.inlineParsing(currBlock);
-      await logseq.Editor.updateBlock(uuid, newStr);
+      const settings = JSON.parse(logseq.settings["regex-linker-map"]);
+      let newLine = currBlock.content;
+      for (const fieldName in settings) {
+        const regex = new RegExp(fieldName, "g");
+        if (regex.test(newLine)) {
+          newLine = newLine.replaceAll(regex, settings[fieldName]);
+        }
+      }
+
+      await logseq.Editor.updateBlock(uuid, newLine);
     }
   }
 };
 
 export const parseMutationObserver = (): void => {
   //@ts-expect-error
-  const observer = new top!.MutationObserver(callback);
+  const observer = new top!.MutationObserver((x) => callback(x));
   observer.observe(top?.document.getElementById("app-container"), {
     attributes: false,
     childList: true,
     subtree: true,
   });
 };
-
-function App() {
-  const [settings, setSettings] = useState(logseq.settings);
-
-  useEffect(() => {
-    logseq.on("settings:changed", (a) => {
-      setSettings(a);
-    });
-  }, []);
-
-  return (
-    <div>
-      <h1>DIALOG</h1>
-
-      <p className="ctl">
-        <button
-          onClick={() => {
-            logseq.hideMainUI();
-          }}
-        >
-          OK
-        </button>
-      </p>
-    </div>
-  );
-}
 
 const main = () => {
   parseMutationObserver(); // enable mutation observer
@@ -71,44 +49,31 @@ const main = () => {
   root.render(<App />);
 
   logseq.provideModel({
-    openFontsPanel(e) {
-      const { rect } = e;
-
-      logseq.setMainUIInlineStyle({
-        top: `${rect.top + 20}px`,
-        left: `${rect.right - 10}px`,
-      });
-
+    openRegexLinker() {
       logseq.toggleMainUI();
     },
   });
 
-  document.addEventListener(
-    "keydown",
-    function (e) {
-      if (e.keyCode === 27) {
-        logseq.hideMainUI();
-      }
-    },
-    false,
-  );
+  logseq.provideStyle(`
+    @import url("https://cdn.jsdelivr.net/npm/@icon/icofont@1.0.1-alpha.1/icofont.min.css");
+  `);
 
   logseq.setMainUIInlineStyle({
+    top: "0",
+    left: "0",
+    right: "0",
+    bottom: "0",
     position: "fixed",
-    width: "290px",
+    width: "100%",
+    height: "100%",
     zIndex: 999,
-    transform: "translateX(-50%)",
   });
 
   logseq.App.registerUIItem("toolbar", {
-    key: "awesome-fonts-btn",
+    key: "Regex-Matcher",
     template: `
-        <a 
-           style="font-weight: bold"
-           data-on-click="openFontsPanel" 
-           data-rect
-        >
-          o
+        <a data-on-click="openRegexLinker">
+          r
         </a>
     `,
   });
