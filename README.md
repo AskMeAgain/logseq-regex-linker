@@ -1,14 +1,19 @@
 # Regex Linker
 
-They idea is that you can provide multiple regex to logseq and whenever you type something which matches that regex, the text gets replaces with something else.
+They idea is that you can provide multiple regex to logseq and whenever you type something which matches that regex, 
+the text gets replaces with something else.
 
 Original inspiration was that i wanted to replace jira ticket ids with the links to that ticket. Eg if i type in "PROJ-1234", it will automatically create a link to
 http://jira-cloud-whatever.com/id/PROJ-1234
 
-## Example config
+Thanks to [datenlp plugin](https://github.com/hkgnp/logseq-datenlp-plugin) by [hkgnp](https://github.com/hkgnp) for inspiration on how to write this plugin
 
-(escape \ via \\ in the regex)
+![test](example.gif)
 
-    {
-        "(PROJ-[0-9]*)\\s": "[$1](http://cloud-jira-whatever.com/id/$1) "
-    }
+## Getting started
+
+1. Download plugin
+2. Go to Settings -> Plugin -> Regex Linker
+3. Separate regex from replacement value via "::::" (4 colons)
+
+       (PROJ-[0-9]*)\s::::[$1](http://cloud-jira-whatever.com/id/$1)
