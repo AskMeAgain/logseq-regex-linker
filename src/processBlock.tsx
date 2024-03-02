@@ -9,17 +9,24 @@ export const processBlock = async (mutationsList: MutationRecord[]): Promise<voi
       const currBlock = await logseq.Editor.getBlock(uuid);
       if (!currBlock) return;
 
-      //Execute inline parsing2
-      let setting = logseq.settings!["regex-linker-map"] as string;
-      if (setting === undefined || setting === null) {
-        return;
-      }
-      const settings = JSON.parse(setting);
       let newLine = currBlock.content;
-      for (const fieldName in settings) {
-        const regex = new RegExp(fieldName, "g");
+
+      for (let i = 1; i <= 5; i++) {
+        let setting = logseq.settings!["regex-map-" + i] as string;
+        if (setting === undefined || setting === null  || setting === "") {
+          continue;
+        }
+        const split = setting.split("::::");
+        if(split.length != 2){
+          continue;
+        }
+
+        const regexStr = split[0] as string;
+        const replacement = split[1] as string;
+
+        const regex = new RegExp(regexStr, "g");
         if (regex.test(newLine)) {
-          newLine = newLine.replaceAll(regex, settings[fieldName]);
+          newLine = newLine.replaceAll(regex, replacement);
         }
       }
 

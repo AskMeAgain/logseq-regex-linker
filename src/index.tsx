@@ -1,6 +1,4 @@
 import "@logseq/libs";
-import ReactDOM from "react-dom/client";
-import {App} from "~/app";
 import {processBlock} from "~/processBlock";
 
 const main = () => {
@@ -10,34 +8,42 @@ const main = () => {
     childList: true,
     subtree: true,
   });
-
-  ReactDOM.createRoot(document.querySelector("#app")!).render(<App/>);
-
-  logseq.provideModel({
-    openRegexLinker() {
-      logseq.toggleMainUI();
-    },
-  });
-
-  logseq.setMainUIInlineStyle({
-    top: "0",
-    left: "0",
-    right: "0",
-    bottom: "0",
-    position: "fixed",
-    width: "100%",
-    height: "100%",
-    zIndex: 999,
-  });
-
-  logseq.App.registerUIItem("toolbar", {
-    key: "Regex-Matcher",
-    template: `
-        <a data-on-click="openRegexLinker">
-          r
-        </a>
-    `,
-  });
 };
 
-logseq.ready(main).catch(console.error);
+logseq.useSettingsSchema([
+  {
+    key: "regex-map-1",
+    default: "",
+    description: "Regex Replacement Map Slot 1",
+    title: "Regex Map",
+    type: "string"
+  },
+  {
+    key: "regex-map-2",
+    default: "",
+    description: "Regex Replacement Map Slot 2",
+    title: "Regex Map",
+    type: "string"
+  },
+  {
+    key: "regex-map-3",
+    default: "",
+    description: "Regex Replacement Map Slot 3",
+    title: "Regex Map",
+    type: "string"
+  },
+  {
+    key: "regex-map-4",
+    default: "",
+    description: "Regex Replacement Map Slot 4",
+    title: "Regex Map",
+    type: "string"
+  },
+  {
+    key: "regex-map-5",
+    default: "",
+    description: "Regex Replacement Map Slot 5",
+    title: "Regex Map",
+    type: "string"
+  }
+  ]).ready(main).catch(console.error);
