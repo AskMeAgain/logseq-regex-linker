@@ -33,6 +33,6 @@ jobs:
           echo "tag_name=git tag --sort version:refname | tail -n 1" >> $GITHUB_OUTPUT
 
       - name: Release
-        run: npm semantic-release
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
