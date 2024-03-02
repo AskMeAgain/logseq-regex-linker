@@ -9,6 +9,7 @@
     "icon": "./icon.svg",
     "main": "dist/index.html"
   },
+  "repository": "https://github.com/AskMeAgain/logseq-regex-linker.git",
   "scripts": {
     "dev": "npx vite",
     "build": "npx tsc && npx vite build",
