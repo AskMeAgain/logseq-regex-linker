@@ -1,6 +1,6 @@
 # Regex Linker
 
-They idea is that you can provide multiple regex to logseq and whenever you type something which matches that regex, 
+The idea is that you can provide multiple regex to logseq and whenever you type something which matches that regex, 
 the text gets replaces with something else.
 
 Original inspiration was that i wanted to replace jira ticket ids with the links to that ticket. Eg if i type in "PROJ-1234", it will automatically create a link to
