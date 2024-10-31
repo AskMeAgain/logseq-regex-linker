@@ -16,6 +16,10 @@ Thanks to [datenlp plugin](https://github.com/hkgnp/logseq-datenlp-plugin) by [h
 2. Go to Settings -> Plugin -> Regex Linker
 3. Separate regex from replacement value via "::::" (4 colons)
 
+## Cookbook
+
+#### Match jira strings
+
        (PROJ-[0-9]*)::::[$1](http://cloud-jira-whatever.com/id/$1)
 
 ## V2 Regex matching
