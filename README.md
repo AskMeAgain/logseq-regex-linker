@@ -18,7 +18,7 @@ Thanks to [datenlp plugin](https://github.com/hkgnp/logseq-datenlp-plugin) by [h
 
 ## Cookbook
 
-#### Match jira string
+#### Match jira strings
 
        (PROJ-[0-9]*)::::[$1](http://cloud-jira-whatever.com/id/$1)
 
