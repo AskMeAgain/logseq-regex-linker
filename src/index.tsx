@@ -25,8 +25,8 @@ export const processBlock = async (mutationsList: MutationRecord[]): Promise<voi
           continue;
         }
 
-        const replacement = split[1] as string;
         const regex = new RegExp(split[0] as string, "g");
+        const replacement = split[1] as string;
 
         const allMatches = newLine.matchAll(regex);
         const uniqueMatches = new Set<string>();
