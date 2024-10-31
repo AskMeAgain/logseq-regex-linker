@@ -11,28 +11,43 @@ export const processBlock = async (mutationsList: MutationRecord[]): Promise<voi
       const currBlock = await logseq.Editor.getBlock(uuid);
       if (!currBlock) return;
 
-      let newLine = currBlock.content;
+      //adding this lines as this allows us to split the line correctly
+      let newLine = " " + currBlock.content + " ";
 
       for (let i = 1; i <= 5; i++) {
         let setting = logseq.settings!["regex-map-" + i] as string;
-        if (setting === undefined || setting === null  || setting === "") {
+        if (setting === undefined || setting === null || setting === "") {
           continue;
         }
+
         const split = setting.split("::::");
-        if(split.length != 2){
+        if (split.length != 2) {
           continue;
         }
 
         const replacement = split[1] as string;
-        const regexStr = split[0] as string;
+        const regex = new RegExp(split[0] as string, "g");
 
-        const regex = new RegExp(regexStr, "g");
-        if (regex.test(newLine)) {
-          newLine = newLine.replaceAll(regex, replacement);
+        const allMatches = newLine.matchAll(regex);
+        const uniqueMatches = new Set<string>();
+        for (const match of allMatches) {
+          uniqueMatches.add(match[0]);
+        }
+
+        for (const matchedString of uniqueMatches) {
+          const replacedString = matchedString.replaceAll(regex, replacement);
+
+          newLine = newLine.split(replacedString)
+            //no regex replacement here
+            .map(x => x.replaceAll(matchedString, replacedString))
+            //joining back
+            .join(replacedString);
         }
       }
 
-      await logseq.Editor.updateBlock(uuid, newLine);
+      if (currBlock.content !== newLine.trim()) {
+        await logseq.Editor.updateBlock(uuid, newLine);
+      }
     }
   }
 };
@@ -82,4 +97,4 @@ logseq.useSettingsSchema([
     title: "Regex Map",
     type: "string"
   }
-  ]).ready(main).catch(console.error);
+]).ready(main).catch(console.error);
