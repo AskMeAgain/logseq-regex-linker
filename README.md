@@ -22,8 +22,15 @@ Thanks to [datenlp plugin](https://github.com/hkgnp/logseq-datenlp-plugin) by [h
 
        (PROJ-[0-9]*)::::[$1](http://cloud-jira-whatever.com/id/$1)
 
-## V2 Regex matching
+## V2.0.0 Regex matching
 
 Thanks to [terminalImage](https://github.com/terminalmage) for an improved algorithm. See [here](https://github.com/AskMeAgain/logseq-regex-linker/issues/2) for more information
 
 I changed the regex matching algorithm. If you notice any errors please tell me
+
+## V2.1.0 Break on first match
+
+This is an optional flag you can enable (at the top of the plugin settings). 
+Useful if you have lots of pattern that can match each other.
+
+![settings](settings.png)

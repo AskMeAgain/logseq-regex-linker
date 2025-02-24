@@ -43,6 +43,11 @@ export const processBlock = async (mutationsList: MutationRecord[]): Promise<voi
             //joining back
             .join(replacedString);
         }
+
+        //special flag
+        if(uniqueMatches.size > 0 && logseq.settings!["stop-on-first-match"] as boolean){
+          break;
+        }
       }
 
       if (currBlock.content !== newLine.trim()) {
@@ -62,6 +67,13 @@ const main = () => {
 };
 
 logseq.useSettingsSchema([
+  {
+    key: "stop-on-first-match",
+    default: false,
+    description: "If a match happens, stop other regex replacements",
+    title: "Stop on First Match",
+    type: "boolean"
+  },
   {
     key: "regex-map-1",
     default: "",
